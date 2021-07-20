@@ -52,6 +52,7 @@ public enum DamageType
     // Base stats
     [SerializeField] protected int maxHp;
     [SerializeField] protected int currentHp;
+    [SerializeField] protected int level = 1;
     [SerializeField] protected int armor_Physical = 0;
     [SerializeField] protected int armor_Magic = 0;
     [SerializeField] protected int attack;

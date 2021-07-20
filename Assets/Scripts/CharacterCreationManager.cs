@@ -5,25 +5,40 @@ using UnityEngine.UI;
 
 public class CharacterCreationManager : MonoBehaviour
 {
+    // Private and readonly text and buttons
     [SerializeField] private Text CharacterText;
     [SerializeField] private Text StatText;
-
+    [SerializeField] private Text HPLevelText;
     [SerializeField] private Button[] buttons_plus;
     [SerializeField] private Button[] buttons_minus;
 
+    // Variables for values
     private string c_name;
-    private int c_hp;
     private Gender c_gender;
     private Race c_race;
     private Class c_class;
     private Alignment c_alignment;
-    private int pointsRemaining = 15;
+
+    // Variables for stats
+    // 0 = Strength, 1 = Dexterity, 2 = Intelligence,
+    // 3 = Wisdom, 4 = Constitution, 5 = Charisma
+    private int statsRemaining = 15;
     private int[] stats = new int[6];
     private int[] baseStats = new int[6];
+
+    // Variable for which of the values that have been selected
+    // 0 = name, 1 = gender, 2 = race, 3 = class, 4 = alignment
     private bool[] selected = new bool[5];
 
+    // Variable to check so several players aren't created
+    private bool playerCreated = false;
+
     /// <summary>
-    /// Setting all the types and the name
+    /// SETTING VALUES
+    /// 
+    /// Checking for when values are 0 as the first option for all types are
+    /// to "please choose", therefore value - 1 is actually the first option
+    /// Always calls UpdateCharacter to fix text, resetting stats etc.
     /// </summary>
     public void SetName(string name)
     {
@@ -96,7 +111,11 @@ public class CharacterCreationManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Resets all values when a full combo has been selected
+    /// RESETS AND UPDATES CHARACTER
+    /// 
+    /// First fixes the text, then resets all stats. Then updates the stats depending on chosen values.
+    /// The base stats are then set to act as a limit and finally the stat points are awarded and the
+    /// text and buttons are updated before changing any values
     /// </summary>
     private void UpdateCharacter()
     {
@@ -118,7 +137,7 @@ public class CharacterCreationManager : MonoBehaviour
             }
 
             // Resets points remaining
-            pointsRemaining = 15;
+            statsRemaining = 15;
 
             // Updates the text and buttons
             UpdateStatText();
@@ -141,6 +160,12 @@ public class CharacterCreationManager : MonoBehaviour
         }
         return true;
     }
+
+    /// <summary>
+    /// STATS
+    /// 
+    /// Handles resetting, as well as updating depending on race and class
+    /// </summary>
 
     private void ResetAllStats()
     {
@@ -208,12 +233,15 @@ public class CharacterCreationManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Handles buttons
+    /// BUTTONS AND TEXT
+    /// 
+    /// Handles [+] and [-] buttons, updates all text for the buttons and
+    /// checks so buttons are only active when they should be active
     /// </summary>
     public void IncreaseStat(int stat)
     {
         stats[stat]++;
-        pointsRemaining--;
+        statsRemaining--;
         UpdateStatText();
         UpdateButtonsActivated();
     }
@@ -221,7 +249,7 @@ public class CharacterCreationManager : MonoBehaviour
     public void DecreaseStat(int stat)
     {
         stats[stat]--;
-        pointsRemaining++;
+        statsRemaining++;
         UpdateStatText();
         UpdateButtonsActivated();
     }
@@ -229,13 +257,14 @@ public class CharacterCreationManager : MonoBehaviour
     private void UpdateStatText()
     {
         StatText.text = $"{stats[0]}\n{stats[1]}\n{stats[2]}\n{stats[3]}\n{stats[4]}\n{stats[5]}";
+        HPLevelText.text = $"HP: {stats[4] * 2}\nLevel: 1";
     }
 
     private void UpdateButtonsActivated()
     {
         bool activateButton;
         
-        if (pointsRemaining <= 0)
+        if (statsRemaining <= 0)
             activateButton = false;
         else
             activateButton = true;
@@ -255,13 +284,26 @@ public class CharacterCreationManager : MonoBehaviour
     } 
 
     /// <summary>
-    /// Creation of the character
+    /// CREATING PLAYER
+    /// 
+    /// Creates a GameObject, adds the component Player Character and updates the start values
     /// </summary>
     public void CreateCharacter()
     {
-        if (AllSelected() && pointsRemaining == 0)
-            Instantiate(new PlayerCharacter(c_name, c_hp, c_gender, c_race, c_class, c_alignment, stats));
+        if (AllSelected() && statsRemaining == 0 && !playerCreated)
+        {
+            playerCreated = true;
+            GameObject Player = new GameObject();
+            Player.AddComponent<PlayerCharacter>();
+            Player.GetComponent<PlayerCharacter>().StartValues(c_name, c_gender, c_race, c_class, c_alignment, stats);
+        }
+        else if (playerCreated)
+        {
+            Debug.Log("A player has already been created.");
+        }
         else
+        {
             Debug.Log("You must choose all aspects of your character and spend all points!");
+        }
     }
 }
