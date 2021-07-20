@@ -4,22 +4,23 @@ using UnityEngine;
 
 public class PlayerCharacter : Character
 {
-    [SerializeField] public string characterName { get; private set; }
-    [SerializeField] public Gender charGender { get; private set; }
-    [SerializeField] public Race charRace { get; private set; }
-    [SerializeField] public Class charClass { get; private set; }
-    [SerializeField] public Alignment charAlignment { get; private set; }
+    public string characterName { get; private set; }
+    public Gender charGender { get; private set; }
+    public Race charRace { get; private set; }
+    public Class charClass { get; private set; }
+    public Alignment charAlignment { get; private set; }
 
-    [SerializeField] public int strength { get; private set; }
-    [SerializeField] public int dexterity { get; private set; }
-    [SerializeField] public int intelligence { get; private set; }
-    [SerializeField] public int wisdom { get; private set; }
-    [SerializeField] public int constitution { get; private set; }
-    [SerializeField] public int charisma { get; private set; }
+    public int strength { get; private set; }
+    public int dexterity { get; private set; }
+    public int intelligence { get; private set; }
+    public int wisdom { get; private set; }
+    public int constitution { get; private set; }
+    public int charisma { get; private set; }
 
     public void StartValues(string name, Gender c_gender, Race c_race, Class c_class, Alignment c_alignment, int[] stats)
     {
         characterName = name;
+        gameObject.name = name;
         charGender = c_gender;
         charRace = c_race;
         charClass = c_class;
