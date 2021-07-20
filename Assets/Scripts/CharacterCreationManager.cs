@@ -119,6 +119,7 @@ public class CharacterCreationManager : MonoBehaviour
     /// </summary>
     private void UpdateCharacter()
     {
+        // ABSTRACTION
         if (AllSelected())
         {
             // Update the text for the character

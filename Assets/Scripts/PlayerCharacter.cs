@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// INHERITANCE
 public class PlayerCharacter : Character
 {
+    // ENCAPSULATION
     public string characterName { get; private set; }
     public Gender charGender { get; private set; }
     public Race charRace { get; private set; }
@@ -37,6 +39,7 @@ public class PlayerCharacter : Character
         currentHp = maxHp;
     }
 
+    // POLYMORPHISM
     protected override void Dead()
     {
         base.Dead();

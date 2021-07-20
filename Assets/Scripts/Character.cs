@@ -47,6 +47,7 @@ public enum DamageType
     Magic,
 }
 
+// INHERITANCE
  public abstract class Character : MonoBehaviour
 {
     // Base stats
