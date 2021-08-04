@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Eric.CharacterStats;
 
 // INHERITANCE
 public class PlayerCharacter : Character
@@ -12,12 +13,12 @@ public class PlayerCharacter : Character
     public Class charClass { get; private set; }
     public Alignment charAlignment { get; private set; }
 
-    public int strength { get; private set; }
-    public int dexterity { get; private set; }
-    public int intelligence { get; private set; }
-    public int wisdom { get; private set; }
-    public int constitution { get; private set; }
-    public int charisma { get; private set; }
+    public CharacterStat Strength { get; private set; }
+    public CharacterStat Dexterity { get; private set; }
+    public CharacterStat Intelligence { get; private set; }
+    public CharacterStat Wisdom { get; private set; }
+    public CharacterStat Constitution { get; private set; }
+    public CharacterStat Charisma { get; private set; }
 
     public void StartValues(string name, Gender c_gender, Race c_race, Class c_class, Alignment c_alignment, int[] stats)
     {
@@ -28,14 +29,14 @@ public class PlayerCharacter : Character
         charClass = c_class;
         charAlignment = c_alignment;
 
-        strength = stats[0];
-        dexterity = stats[1];
-        intelligence = stats[2];
-        wisdom = stats[3];
-        constitution = stats[4];
-        charisma = stats[5];
+        Strength.BaseValue = stats[0];
+        Dexterity.BaseValue = stats[1];
+        Intelligence.BaseValue = stats[2];
+        Wisdom.BaseValue = stats[3];
+        Constitution.BaseValue = stats[4];
+        Charisma.BaseValue = stats[5];
 
-        maxHp = constitution * 2;
+        maxHp = (int) Constitution.Value * 2;
         currentHp = maxHp;
     }
 
@@ -46,3 +47,19 @@ public class PlayerCharacter : Character
         Debug.Log($"The character {characterName} has died!");
     }
 }
+
+// Example of items
+/* public class Item
+{
+    public void Equip(PlayerCharacter c)
+    {
+        c.Strength.AddModifier(new StatModifier(10, StatModType.Flat, this));
+        c.Strength.AddModifier(new StatModifier(0.1f, StatModType.PercentMult, this));
+    }
+
+    public void Unequip(PlayerCharacter c)
+    {
+        c.Strength.RemoveAllModifiersFromSource(this);
+    }
+}
+*/
